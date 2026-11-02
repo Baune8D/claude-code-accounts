@@ -1,0 +1,27 @@
+bin/claude
+  s_4c386189ab2cd1::t_11b46635c8005a 1-33
+bin/sync-settings
+  s_4c386189ab2cd1::t_079065c029b0aa 1-78
+README.md
+  s_4c386189ab2cd1::t_48c1efcde72039 1-130
+install.sh
+  s_4c386189ab2cd1::t_a78da29fdc8c42 1-24
+setup-account.sh
+  s_4c386189ab2cd1::t_17d5e9a3af8e25 1-106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d57965f67c27eb811f1271fa52fb7285b2349c9f",
+  "prompts": {},
+  "sessions": {
+    "s_4c386189ab2cd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "863026f3-0a5d-4f36-ac75-e959576781ea",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Morten Larsen <mortenl41@gmail.com>"
+    }
+  }
+}
