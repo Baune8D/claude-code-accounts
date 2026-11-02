@@ -1,0 +1,19 @@
+LICENSE
+  s_4c386189ab2cd1::t_4766597fdb9b50 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "521f8487e3a4d35033d993003017ae4fb2271b41",
+  "prompts": {},
+  "sessions": {
+    "s_4c386189ab2cd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "863026f3-0a5d-4f36-ac75-e959576781ea",
+        "model": "unknown"
+      },
+      "human_author": "Morten Larsen <mortenl41@gmail.com>"
+    }
+  }
+}
