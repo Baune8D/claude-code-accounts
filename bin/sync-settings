@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""Sync the shared parts of ~/.claude/settings.json (the default account, used as the base) into
+other account config dirs.
+
+Usage: sync-settings <config-dir> [<config-dir> ...]
+
+Everything in the base is copied EXCEPT entries matching EXCLUDE below.
+Deep merge, base wins: keys the base defines are overwritten in the account file; keys that only
+exist in the account file (e.g. set via /config in that account) are kept.
+The claude wrapper runs this automatically whenever the base is newer than the account's file.
+"""
+import fnmatch
+import json
+import os
+import sys
+import tempfile
+
+BASE = os.path.expanduser("~/.claude/settings.json")
+
+# Entries that must stay in the default account only, e.g. an employer's private plugin
+# marketplace and its plugins. Section -> key glob patterns. These are placeholders: edit them.
+# Why it matters: if another account sees a marketplace in extraKnownMarketplaces together with
+# its plugins in enabledPlugins, Claude Code installs them there automatically.
+EXCLUDE = {
+    "enabledPlugins": ["*@my-work-marketplace"],
+    "extraKnownMarketplaces": ["my-work-marketplace"],
+    "pluginConfigs": ["*@my-work-marketplace"],
+}
+
+
+def excluded(section, key):
+    return any(fnmatch.fnmatch(key, p) for p in EXCLUDE.get(section, []))
+
+
+def filtered_base():
+    with open(BASE) as f:
+        base = json.load(f)
+    for section in EXCLUDE:
+        if isinstance(base.get(section), dict):
+            base[section] = {k: v for k, v in base[section].items() if not excluded(section, k)}
+            if not base[section]:
+                del base[section]
+    return base
+
+
+def merge(dst, src):
+    for k, v in src.items():
+        if isinstance(v, dict) and isinstance(dst.get(k), dict):
+            merge(dst[k], v)
+        else:
+            dst[k] = v
+    return dst
+
+
+def sync(config_dir):
+    target = os.path.join(os.path.expanduser(config_dir), "settings.json")
+    current = {}
+    if os.path.isfile(target) and not os.path.islink(target):
+        with open(target) as f:
+            current = json.load(f)
+    result = merge(current, filtered_base())
+    for section in EXCLUDE:  # drop excluded keys that linger from earlier syncs or plugin commands
+        if isinstance(result.get(section), dict):
+            for k in [k for k in result[section] if excluded(section, k)]:
+                del result[section][k]
+    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(target), prefix=".settings.", suffix=".tmp")
+    with os.fdopen(fd, "w") as f:
+        json.dump(result, f, indent=2)
+        f.write("\n")
+    os.replace(tmp, target)  # also replaces a symlink with a real file
+    print(f"synced {target}")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        sys.exit(__doc__)
+    for d in sys.argv[1:]:
+        sync(d)

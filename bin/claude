@@ -1,0 +1,33 @@
+#!/bin/sh
+# claude wrapper: picks the Claude Code account (config dir) from the working directory, then runs
+# the real claude. install.sh puts it first on PATH, so terminals AND tools that start claude
+# without a shell (e.g. JetBrains Air) both go through it.
+#
+# ACCOUNTS: one "<folder> <config dir>" pair per line. Use absolute paths without spaces or a
+# trailing slash. The first folder that contains the working directory wins. Everywhere else uses
+# the default ~/.claude. An explicitly set CLAUDE_CONFIG_DIR is always respected.
+ACCOUNTS="
+$HOME/Code/client     $HOME/.claude-client
+$HOME/Code/personal   $HOME/.claude-personal
+"
+REAL_CLAUDE="$HOME/.local/bin/claude"             # native installer location (updater-managed symlink)
+SYNC_SETTINGS="$HOME/.local/claude-switch/sync-settings"
+
+if [ -z "$CLAUDE_CONFIG_DIR" ]; then
+  cwd="$(pwd -P)/"   # -P gives the on-disk spelling, so a wrongly-cased cd on APFS still matches
+  while read -r folder dir; do
+    [ -n "$folder" ] || continue
+    case "$cwd" in
+      "$folder/"*)
+        export CLAUDE_CONFIG_DIR="$dir"
+        # Carry changes to the shared ~/.claude/settings.json over to this account.
+        if [ "$HOME/.claude/settings.json" -nt "$dir/settings.json" ]; then
+          "$SYNC_SETTINGS" "$dir" >/dev/null 2>&1 || true
+        fi
+        break ;;
+    esac
+  done <<EOF
+$ACCOUNTS
+EOF
+fi
+exec "$REAL_CLAUDE" "$@"
