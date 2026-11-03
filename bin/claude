@@ -21,6 +21,8 @@ if [ -z "$CLAUDE_CONFIG_DIR" ]; then
       "$folder/"*)
         export CLAUDE_CONFIG_DIR="$dir"
         # Carry changes to the shared ~/.claude/settings.json over to this account.
+        # -nt is in POSIX.1-2024 and supported by macOS's /bin/sh; older shellcheck versions flag it
+        # shellcheck disable=SC3013
         if [ "$HOME/.claude/settings.json" -nt "$dir/settings.json" ]; then
           "$SYNC_SETTINGS" "$dir" >/dev/null 2>&1 || true
         fi
