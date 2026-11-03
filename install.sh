@@ -13,6 +13,8 @@ cp "$REPO/bin/sync-settings" "$PREFIX/sync-settings"
 chmod +x "$PREFIX/bin/claude" "$PREFIX/sync-settings"
 echo "installed $PREFIX/bin/claude and $PREFIX/sync-settings"
 
+# Single quotes on purpose: the line is written to ~/.zshrc as is, and expands when zsh starts
+# shellcheck disable=SC2016
 LINE='export PATH="$HOME/.local/claude-switch/bin:$PATH"'
 ZSHRC="$HOME/.zshrc"
 if grep -qF "$LINE" "$ZSHRC" 2>/dev/null; then

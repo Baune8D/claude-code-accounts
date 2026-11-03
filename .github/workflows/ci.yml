@@ -1,0 +1,15 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - run: shellcheck install.sh setup-account.sh bin/claude
+      # sync-settings is Python, which shellcheck can't read
+      - run: python3 -m py_compile bin/sync-settings
