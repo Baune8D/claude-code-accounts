@@ -1,5 +1,8 @@
 # claude-code-accounts
 
+[![CI](https://github.com/Baune8D/claude-code-accounts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Baune8D/claude-code-accounts/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/Baune8D/claude-code-accounts)](https://github.com/Baune8D/claude-code-accounts/blob/main/LICENSE)
+
 Use several Claude subscriptions with Claude Code on one Mac, for example a work Team plan,
 a client organization's Team plan and a personal Pro/Max plan. The account is picked
 automatically from the folder you start `claude` in. That works in a terminal and in IDE
