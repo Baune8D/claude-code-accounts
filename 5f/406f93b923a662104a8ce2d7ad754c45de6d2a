@@ -1,0 +1,25 @@
+CLAUDE.md
+  s_42306460ad5147::t_2d7668730a3077 5
+README.md
+  s_42306460ad5147::t_8d83c67c5f4c1f 31-32,50,121-130,143-145
+bin/claude
+  s_42306460ad5147::t_e6750e233f37f5 29-37
+setup-account.sh
+  s_42306460ad5147::t_9e3fc208f83d09 25-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5f406f93b923a662104a8ce2d7ad754c45de6d2a",
+  "prompts": {},
+  "sessions": {
+    "s_42306460ad5147": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "63d29f1a-ecd9-49b7-ab37-e4cc29f8f576",
+        "model": "unknown"
+      },
+      "human_author": "Morten Larsen <mortenl41@gmail.com>"
+    }
+  }
+}
