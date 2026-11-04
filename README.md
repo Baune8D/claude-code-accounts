@@ -131,3 +131,7 @@ Inside a session, `/status` shows the account and organization.
 1. Remove the `PATH` line from `~/.zshrc`, delete `~/.local/claude-switch`, and restart the IDE.
 2. Optionally delete the extra account dirs, and their `Claude Code-credentials-<hash>` entries in
    Keychain Access.
+
+## License
+
+[MIT](LICENSE)
