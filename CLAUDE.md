@@ -2,7 +2,7 @@
 
 Per-folder Claude Code account switching on macOS. One config directory per account (`CLAUDE_CONFIG_DIR`), picked by a wrapper from the working directory, so it also works in IDEs that start `claude` without a shell, such as JetBrains Air.
 
-- `bin/claude`: the wrapper. It maps the working directory (`pwd -P`) to a config dir through its `ACCOUNTS` list, exports `CLAUDE_CONFIG_DIR` unless one is set, re-syncs settings when needed, and `exec`s the real `~/.local/bin/claude`. POSIX `sh`.
+- `bin/claude`: the wrapper. It maps the working directory (`pwd -P`) to a config dir through its `ACCOUNTS` list, exports `CLAUDE_CONFIG_DIR` unless one is set, re-syncs settings when needed, links the account's project dirs into `~/.claude/projects` for JetBrains Air, and `exec`s the real `~/.local/bin/claude`. POSIX `sh`.
 - `bin/sync-settings`: Python. Builds an account's `settings.json` from `~/.claude/settings.json` (deep merge, base wins) minus the `EXCLUDE` patterns.
 - `install.sh` copies both to `~/.local/claude-switch` and adds the `PATH` line to `~/.zshrc`. `setup-account.sh` creates or re-aligns an account dir. Both are idempotent.
 - The README documents what is shared and what is per account, and the gotchas. Keep it in step with the scripts.

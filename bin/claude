@@ -26,6 +26,15 @@ if [ -z "$CLAUDE_CONFIG_DIR" ]; then
         if [ "$HOME/.claude/settings.json" -nt "$dir/settings.json" ]; then
           "$SYNC_SETTINGS" "$dir" >/dev/null 2>&1 || true
         fi
+        # JetBrains Air only reads sessions from ~/.claude/projects, so link this account's project
+        # dirs there. The transcripts stay in the account dir. A real dir in the base is left alone.
+        mkdir -p "$dir/projects/$(printf %s "${cwd%/}" | sed 's/[^a-zA-Z0-9]/-/g')" "$HOME/.claude/projects" 2>/dev/null
+        for p in "$dir"/projects/*/; do
+          [ -d "$p" ] || continue
+          p="${p%/}"
+          link="$HOME/.claude/projects/${p##*/}"
+          [ -e "$link" ] || [ -L "$link" ] || ln -s "$p" "$link" 2>/dev/null
+        done
         break ;;
     esac
   done <<EOF

@@ -22,6 +22,17 @@ for f in CLAUDE.md agents ide; do
   if [ -e "$DIR/$f" ] || [ -L "$DIR/$f" ]; then echo "   $f: exists"; else ln -s "$BASE/$f" "$DIR/$f"; echo "   $f: linked"; fi
 done
 
+echo "-- projects: links in the base to this account's sessions (JetBrains Air only reads ~/.claude/projects)"
+mkdir -p "$DIR/projects" "$BASE/projects"
+for p in "$DIR"/projects/*/; do
+  [ -d "$p" ] || continue
+  p="${p%/}"
+  link="$BASE/projects/${p##*/}"
+  if [ -L "$link" ]; then echo "   ${p##*/}: exists"
+  elif [ -e "$link" ]; then echo "   ${p##*/}: NOT linked, the base has sessions for this folder too. Air only shows those."
+  else ln -s "$p" "$link"; echo "   ${p##*/}: linked"; fi
+done
+
 echo "-- skills: own dir (claude.ai org skills sync into skills/synced per account), custom skills linked"
 [ -L "$DIR/skills" ] && rm "$DIR/skills"   # an older setup linked the whole dir
 mkdir -p "$DIR/skills"
